@@ -542,7 +542,7 @@ export default function SettingsPage() {
                       {categories.map((category) => (
                         <Card
                           key={category.id}
-                          className="shadow-none"
+                          className="shadow-none bg-white dark:bg-zinc-800"
                         >
                           <CardContent className="px-2">
                             <div className="flex justify-between items-center">
