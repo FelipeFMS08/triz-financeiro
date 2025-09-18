@@ -66,7 +66,7 @@ export default function TransactionsPage() {
 
   // Filtrar e ordenar transações
   const filteredTransactions = useMemo(() => {
-    let filtered = transactions.filter((transaction) => {
+    const filtered = transactions.filter((transaction) => {
       // Filtro por busca
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
