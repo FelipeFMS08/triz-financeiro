@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 interface RouteParams {
-  params: { id: string }
+  params: Promise<{ id: string }>;
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
@@ -19,7 +19,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const categoryId = parseInt(params.id);
+    const { id } = await params;
+
+    const categoryId = parseInt(id);
     if (isNaN(categoryId)) {
       return NextResponse.json({ error: 'ID da categoria inválido' }, { status: 400 });
     }
