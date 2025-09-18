@@ -1,15 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Open_Sans, Roboto } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+import { Check, CircleCheck, LoaderCircle, XCircle } from "lucide-react";
+import { ThemeProvider } from "@/components/theme-provider";
+import { NavigationBar } from "@/components/common/navigation-bar";
 
-const geistSans = Geist({
+const geistSans = Open_Sans({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const geistMono = Open_Sans({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -23,11 +33,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-zinc-800`}
+        suppressHydrationWarning
       >
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="white">
+          {children}
+          <Toaster
+            duration={15}
+            toastOptions={{
+              style: {
+                background: "white",
+                border: "none",
+                color: "#333",
+              },
+            }}
+            icons={{
+              success: <CircleCheck className="text-[#36e0a2] w-5" />,
+              loading: (
+                <LoaderCircle className="text-blue-700 w-5 animate-spin" />
+              ),
+              error: <XCircle className="text-[#ff7770] w-5" />,
+            }}
+            position="top-center"
+            richColors
+          />
+          <NavigationBar />
+        </ThemeProvider>
       </body>
     </html>
   );
