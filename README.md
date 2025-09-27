@@ -2,6 +2,26 @@
 
 A comprehensive financial management application built with cutting-edge web technologies, featuring intuitive expense tracking, intelligent budget management, and sophisticated analytics with beautiful data visualizations. This project demonstrates advanced full-stack development skills with modern React patterns, database optimization, and user-centric design.
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="./screenshots/Login.png" width="300" />
+      <br />
+      <b>Login Page</b>
+    </td>
+    <td align="center">
+      <img src="./screenshots/dashboard-dark.png" width="300" />
+      <br />
+      <b>Dashboard</b>
+    </td>
+    <td align="center">
+      <img src="./screenshots/report.png" width="300" />
+      <br />
+      <b>Report Page</b>
+    </td>
+  </tr>
+</table>
+
 ## ✨ Key Features
 
 ### 🏠 Smart Dashboard
