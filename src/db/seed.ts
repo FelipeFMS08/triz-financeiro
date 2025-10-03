@@ -80,7 +80,6 @@ async function seed() {
       });
     }
 
-    console.log("✅ Categories seeded successfully!");
   } catch (error) {
     console.error("Error seeding categories:", error);
   }

@@ -140,7 +140,6 @@ export default function SettingsPage() {
       if (response.ok) {
         const userData = await response.json();
         await setUser(userData);
-        console.log(user);
       }
     } catch (error) {
       console.error("Erro ao carregar dados do usuário:", error);
@@ -200,7 +199,6 @@ export default function SettingsPage() {
   // Handlers para perfil
   const handleProfileUpdate = async () => {
     setLoading(true);
-    console.log(user);
     try {
       const response = await fetch("/api/user/profile", {
         method: "PUT",

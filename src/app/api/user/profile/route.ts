@@ -51,8 +51,6 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { name, email, image, phone, bio } = body;
 
-    console.log(image);
-
     if (!name || name.trim() === '') {
       return NextResponse.json({ 
         error: 'Nome é obrigatório' 

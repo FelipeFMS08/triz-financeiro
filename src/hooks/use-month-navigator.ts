@@ -27,6 +27,13 @@ export interface NewTransactionData {
   categoryId?: number;
 }
 
+export interface UpdateTransactionData {
+  type: "income" | "expense";
+  description: string;
+  amount: number;
+  categoryId?: number | null;
+}
+
 const STORAGE_KEY = {
   currentMonth: "triz-financeiro-current-month",
   transactionsCache: "triz-financeiro-transactions-cache",
@@ -245,7 +252,7 @@ export const useMonthNavigator = () => {
         categoryId: transactionData.categoryId,
         userId: "",
         date: transactionDate,
-        createdAt: today, // ← MUDANÇA AQUI
+        createdAt: today,
       };
 
       setTransactionsCache((prev) => ({
@@ -277,6 +284,7 @@ export const useMonthNavigator = () => {
         const transactionWithDate = {
           ...newTransaction,
           date: new Date(newTransaction.date),
+          createdAt: new Date(newTransaction.createdAt),
         };
 
         setTransactionsCache((prev) => ({
@@ -299,6 +307,101 @@ export const useMonthNavigator = () => {
     },
     [currentMonth, getMonthKey]
   );
+
+  // NOVA FUNÇÃO: Atualizar transação
+  const updateTransaction = useCallback(
+    async (
+      transactionId: number,
+      updateData: UpdateTransactionData
+    ): Promise<Transaction> => {
+      try {
+        const response = await fetch(`/api/transactions/${transactionId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updateData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const updatedTransaction: Transaction = await response.json();
+        const transactionWithDate = {
+          ...updatedTransaction,
+          date: new Date(updatedTransaction.date),
+          createdAt: new Date(updatedTransaction.createdAt),
+        };
+
+        // Atualizar o cache - pode estar em qualquer mês
+        setTransactionsCache((prev) => {
+          const newCache = { ...prev };
+          
+          // Procurar e atualizar em todos os meses
+          Object.keys(newCache).forEach((key) => {
+            newCache[key] = newCache[key].map((t) =>
+              t.id === transactionId ? transactionWithDate : t
+            );
+          });
+
+          return newCache;
+        });
+
+        return transactionWithDate;
+      } catch (error) {
+        console.error("Erro ao atualizar transação:", error);
+        throw error;
+      }
+    },
+    []
+  );
+
+  // NOVA FUNÇÃO: Deletar transação
+  const deleteTransaction = useCallback(
+    async (transactionId: number): Promise<void> => {
+      try {
+        const response = await fetch(`/api/transactions/${transactionId}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        // Remover do cache - pode estar em qualquer mês
+        setTransactionsCache((prev) => {
+          const newCache = { ...prev };
+          
+          // Remover de todos os meses
+          Object.keys(newCache).forEach((key) => {
+            newCache[key] = newCache[key].filter((t) => t.id !== transactionId);
+          });
+
+          return newCache;
+        });
+      } catch (error) {
+        console.error("Erro ao deletar transação:", error);
+        throw error;
+      }
+    },
+    []
+  );
+
+  // NOVA FUNÇÃO: Recarregar transações (útil após editar/deletar)
+  const refetch = useCallback(async () => {
+    const monthKey = getMonthKey(currentMonth.year, currentMonth.month);
+    
+    // Limpar cache do mês atual
+    setTransactionsCache((prev) => {
+      const newCache = { ...prev };
+      delete newCache[monthKey];
+      return newCache;
+    });
+
+    // Recarregar
+    await loadMonthTransactions(currentMonth.year, currentMonth.month);
+  }, [currentMonth, getMonthKey, loadMonthTransactions]);
 
   const navigateToPreviousMonth = useCallback(() => {
     setCurrentMonth((prev) => {
@@ -367,7 +470,7 @@ export const useMonthNavigator = () => {
           .split(" ")
           .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
           .join(" ")
-      : `${currentMonth.month}/${currentMonth.year}`, // Fallback for SSR
+      : `${currentMonth.month}/${currentMonth.year}`,
     shortName: isClient
       ? new Date(currentMonth.year, currentMonth.month - 1)
           .toLocaleDateString("pt-BR", {
@@ -399,6 +502,10 @@ export const useMonthNavigator = () => {
     navigateToCurrentMonth,
 
     addTransaction,
+    updateTransaction,
+    deleteTransaction,
+    refetch,
+    
     loadMonthTransactions,
     loadCategories,
 

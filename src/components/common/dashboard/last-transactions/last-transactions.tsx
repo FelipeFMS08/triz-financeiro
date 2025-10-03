@@ -24,8 +24,6 @@ export function LastTransactions({
     transaction.description.toLowerCase().includes(searchQuery)
   );
 
-  console.log(transactionsFiltered)
-
   return (
     <div className="flex flex-col gap-5">
       <h1 className="font-semibold">

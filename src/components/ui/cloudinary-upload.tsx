@@ -22,7 +22,6 @@ export function CloudinaryUpload({
   const [uploading, setUploading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(currentImage || null);
   const [error, setError] = useState<string | null>(null);
-  console.log(previewImage)
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

@@ -48,8 +48,6 @@ export function NavigationBar() {
 
   const { data: session } = authClient.useSession();
 
-  console.log(session);
-
   // Evitar hidration mismatch
   useEffect(() => {
     setMounted(true);
