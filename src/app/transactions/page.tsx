@@ -285,10 +285,10 @@ export default function TransactionsPage() {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="w-full mx-auto space-y-6">
         {/* Header */}
         <div className="bg-white dark:bg-zinc-800 border-b border-b-zinc-100 dark:border-b-zinc-600">
-          <div className="max-w-md mx-auto px-4 py-4">
+          <div className="w-full mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button className="p-2 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-full">
                 <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-300" />
@@ -381,13 +381,13 @@ export default function TransactionsPage() {
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="w-full sm:w-auto bg-[#FFAAA5] hover:bg-[#ff9995] text-white text-lg font-bold py-6 border-none">
+                    <Button variant="outline" className="w-full bg-[#FFAAA5] hover:bg-[#ff9995] text-white text-lg font-bold py-6 border-none">
                       <ArrowUpDown className="h-4 w-4 mr-2" />
                       Ordenar
                       <ChevronDown className="h-4 w-4 ml-2" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-82">
+                  <DropdownMenuContent align="center" className="w-60">
                     <DropdownMenuLabel>Ordenar por</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => setSortField("date")}>
@@ -440,7 +440,7 @@ export default function TransactionsPage() {
                   key={transaction.id}
                   className="flex gap-4 items-center shadow-none bg-white dark:bg-zinc-800 border-zinc-100 dark:border-zinc-600"
                 >
-                  <CardContent className="px-0 w-full">
+                  <CardContent className="px-2 w-full">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center space-x-4">
                         <div
@@ -454,10 +454,10 @@ export default function TransactionsPage() {
                         </div>
 
                         <div>
-                          <h3 className="font-semibold text-lg dark:text-white">
+                          <h3 className="font-semibold text-md truncate w-20">
                             {transaction.description}
                           </h3>
-                          <div className="flex items-center space-x-2 mt-1">
+                          <div className="flex items-center max-w-10 space-x-2 mt-1">
                             <Badge variant="outline" className="text-xs dark:border-zinc-600">
                               {getCategoryName(transaction.categoryId)}
                             </Badge>
@@ -468,7 +468,7 @@ export default function TransactionsPage() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3 mb-5">
                         <div
                           className={`${
                             transaction.type === "income"
@@ -482,7 +482,7 @@ export default function TransactionsPage() {
 
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="dark:hover:bg-zinc-700">
+                            <Button variant="ghost" size="sm" className="dark:hover:bg-zinc-700 mt-5 mb-0">
                               <Edit3 className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
